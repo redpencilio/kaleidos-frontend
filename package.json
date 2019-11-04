@@ -17,9 +17,12 @@
     "start": "ember serve --proxy=http://localhost:80",
     "test": "ember test",
     "cypress-local": "./node_modules/.bin/cypress open --browser chrome --env configFile=development",
-    "cypress-dev": "./node_modules/.bin/cypress open --browser chrome --env configFile=dev"
+    "cypress-dev": "./node_modules/.bin/cypress open --browser chrome --env configFile=dev",
+    "build-storybook": "build-storybook -s dist",
+    "storybook": "start-storybook -p 6006 -s dist"
   },
   "devDependencies": {
+    "@babel/core": "^7.6.4",
     "@ember/jquery": "^0.5.2",
     "@ember/optional-features": "^0.6.3",
     "@lblod/ember-acmidm-login": "github:lblod/ember-acmidm-login",
@@ -28,6 +31,12 @@
     "@lblod/ember-rdfa-editor-plugin-system-dispatcher": "^0.5.8",
     "@lblod/ember-vo-webuniversum": "^0.19.12",
     "@lblod/ember-vo-webuniversum-data-table": "^0.2.11",
+    "@storybook/addon-actions": "^5.2.5",
+    "@storybook/addon-links": "^5.2.5",
+    "@storybook/addons": "^5.2.5",
+    "@storybook/ember": "^5.2.5",
+    "@storybook/ember-cli-storybook": "^0.1.0",
+    "babel-loader": "^8.0.6",
     "broccoli-asset-rev": "^2.7.0",
     "cypress": "^3.4.1",
     "cypress-file-upload": "^3.3.4",
