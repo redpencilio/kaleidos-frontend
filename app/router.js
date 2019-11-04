@@ -89,6 +89,12 @@ Router.map(function() {
   });
   this.route('not-supported');
   this.route('help');
+  this.route('styleguide', function() {
+    this.route('alerts');
+    this.route('buttons');
+    this.route('accordion');
+    this.route('button-group');
+  });
 });
 
 export default Router;

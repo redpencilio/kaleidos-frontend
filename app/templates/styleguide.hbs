@@ -1,0 +1,38 @@
+<style>
+  #vlaanderen-header { display: none !important; }
+
+  html, body {
+    height: 100%;
+  }
+
+  #styleguide {
+    display: flex;
+    height: 100%;
+  }
+  #styleguide nav {
+    flex: 0 1 24rem;
+    padding: 2.4rem;
+    border-right: 1px solid #CCC;
+    height: 100%;
+  }
+  #content {
+    flex: 1 0 auto;
+    padding: 2.4rem;
+    height: 100%;
+  }
+
+</style>
+
+<div id="styleguide">
+  <nav>
+    <ul>
+      <li>{{link-to "Alerts" "styleguide.alerts"}}</li>
+      <li>{{link-to "Buttons" "styleguide.buttons"}}</li>
+      <li>{{link-to "Button group" "styleguide.button-group"}}</li>
+      <li>{{link-to "Accordion" "styleguide.accordion"}}</li>
+    </ul>
+  </nav>
+  <div id="content">
+      {{outlet}}
+  </div>
+</div>
