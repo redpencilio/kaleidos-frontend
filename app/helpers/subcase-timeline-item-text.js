@@ -12,7 +12,7 @@ const formatDate = (date) => {
 }
 
 export function subcaseTimelineItemText(params, values) {
-  const label = values.label;
+  const label = values.label || "";
   const phase = values.phase;
   const onAgendaInfo = values.onAgendaInfo;
   const isPostponed = values.isPostponed;
@@ -35,6 +35,7 @@ export function subcaseTimelineItemText(params, values) {
       return label;
   }
 }
+
 
 
 export default helper(subcaseTimelineItemText);
