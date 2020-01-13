@@ -17,7 +17,7 @@ export default Component.extend( {
     return this.get('case.confidential');
   }),
 
-  async copySubcaseProperties(subcase, latestSubcase) {
+  async copySubcaseProperties(subcase, latestSubcase, copyFullSubcase = false) {
     const mandatees = await latestSubcase.get('mandatees');
     const iseCodes = await latestSubcase.get('iseCodes');
     const themes = await latestSubcase.get('themes');
