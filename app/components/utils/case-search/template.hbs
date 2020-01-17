@@ -1,0 +1,85 @@
+<div class="vlc-scroll-wrapper__body">
+  <div class="vl-u-spacer-extended-l">
+    <div class="vl-u-display-flex vl-u-flex-align-center">
+      {{input
+        value=searchText
+        placeholder=(t "search-agenda-items")
+        class="vl-input-field vl-input-field__input full-width-selector"
+      }}
+    </div>
+
+    {{#data-table
+            content=results
+            page=page
+            size=size
+            sort=sort
+            class="vl-data-table vl-data-table--zebra vl-data-table--align-middle"
+            as |table|
+    }}
+      {{#table.content as |c|}}
+        {{#c.header}}
+          <th
+                  class="vl-data-table-col-9 vl-data-table__header-title">
+            {{t "case-name"}}
+          </th>
+          {{#if searchText}}
+            <th
+                    class="vl-data-table-col-1 vl-data-table__header-title">
+              {{t "created-on"}}
+            </th>
+            {{th-sortable
+                    class="vl-data-table-col-1 vl-data-table__header-title"
+                    currentSorting=sort
+                    field="sessionDates"
+                    label=(t "on-agenda-of")
+            }}
+          {{else}}
+            <th
+                    class="vl-data-table-col-2 vl-data-table__header-title">
+              {{t "created-on"}}
+            </th>
+          {{/if}}
+        {{/c.header}}
+        {{#c.body class="tr-hover" as |row|}}
+          <td onclick={{action "selectCase" row}}>
+            <p>
+              {{#if row.shortTitle}}
+                {{row.shortTitle}}
+              {{else}}
+                {{row.title}}
+              {{/if}}
+            </p>
+          </td>
+          <td onclick={{action "selectCase" row}}>
+            {{moment-format row.created "DD-MM-YYYY HH:mm"}}
+          </td>
+          {{#if searchText}}
+            <td onclick={{action "selectCase" row}}>
+              {{moment-format row.sessionDates "DD-MM-YYYY"}}
+            </td>
+          {{/if}}
+        {{/c.body}}
+      {{/table.content}}
+    {{/data-table}}
+  </div>
+</div>
+{{#if isEditingRow}}
+  {{#web-components/vl-modal
+          isOverlay=true
+          title=(t "edit-case")
+          closeModal=(action "cancelEditing")
+  }}
+    {{cases/edit-case
+            caseToEdit=caseToEdit
+            cancelEditing=(action "cancelEditing")
+    }}
+  {{/web-components/vl-modal}}
+{{/if}}
+{{#if isArchivingCase}}
+  {{web-components/vl-modal-verify
+          title=(t "archive-case")
+          message=(t "archive-case-message")
+          cancel=(action "cancelArchiveCase")
+          verify=(action "archiveCase")
+  }}
+{{/if}}
