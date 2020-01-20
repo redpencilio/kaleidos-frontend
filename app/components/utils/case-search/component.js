@@ -73,10 +73,10 @@ export default Component.extend(DataTableRouteMixin, AuthenticatedRouteMixin, {
           };
           if(!searchTerm) {
             _.merge(queryParams, this.mergeQueryOptions(queryParams));
+            this.set('isLoading', false);
             return this.get('store').query("case",queryParams);
           }
           queryParams.filter[searchModifier + textSearchKey] = searchTerm;
-
 
           let searchDocumentType = this.decisionsOnly ? 'casesByDecisionText' : 'cases';
           if (!isEmpty(this.mandatees)) {
@@ -109,6 +109,8 @@ export default Component.extend(DataTableRouteMixin, AuthenticatedRouteMixin, {
     },
 
     async selectCase(caseItem, event) {
+      // We never set loading to false, because the component closes after this action
+      set(this, 'isLoading', true);
       if (event) {
         event.stopPropagation();
       }
