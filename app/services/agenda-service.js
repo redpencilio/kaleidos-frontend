@@ -2,6 +2,7 @@ import Service from '@ember/service';
 import $ from 'jquery';
 import {inject} from '@ember/service';
 import {notifyPropertyChange} from '@ember/object';
+import { bind } from '@ember/runloop';
 import CONFIG from 'fe-redpencil/utils/config';
 import moment from 'moment';
 import ModifiedMixin from 'fe-redpencil/mixins/modified-mixin';
@@ -40,48 +41,24 @@ export default Service.extend(ModifiedMixin, isAuthenticatedMixin, {
     });
   },
 
-  approveAgendaAndCopyToDesignAgenda(currentSession, oldAgenda) {
-    let newAgenda = this.store.createRecord('agenda', {
-      name: 'Ontwerpagenda',
-      createdFor: currentSession,
-      created: moment()
-        .utc()
-        .toDate(),
-      modified: moment()
-        .utc()
-        .toDate(),
+  async approveAgendaAndCopyToDesignAgenda(currentSession, oldAgenda) {
+    if (!oldAgenda) {
+      return oldAgenda;
+    }
+    // Use approveagendaService to duoplicate AgendaItems into new agenda.
+    let result = await $.ajax({
+      method: 'POST',
+      url: '/agenda-approve/approveAgenda',
+      data: {
+        agendaName: "Ontwerpagenda",
+        createdFor: currentSession.id,
+        oldAgendaId: oldAgenda.id,
+      },
     });
-
-    return newAgenda
-      .save()
-      .then((agenda) => {
-        if (oldAgenda) {
-          return $.ajax({
-            method: 'POST',
-            url: '/agenda-approve/approveAgenda',
-            data: {
-              newAgendaId: agenda.id,
-              oldAgendaId: oldAgenda.id,
-            },
-          });
-        } else {
-          notifyPropertyChange(agenda, 'agendaitems');
-          return agenda;
-        }
-      })
-      .then(() => {
-        notifyPropertyChange(newAgenda, 'agendaitems');
-        return newAgenda;
-      }).catch(() => {
-        this.store.findRecord('agenda', newAgenda.get('id')).then((agenda) => {
-          agenda.destroyRecord();
-        });
-        this.globalError.showToast.perform(EmberObject.create({
-          title: this.intl.t('warning-title'),
-          message: "Something went wrong while approving the agenda. Please try again.",
-          type: 'error'
-        }));
-      });
+    notifyPropertyChange(oldAgenda, 'agendaitems');
+    let newAgenda = await this.store.find('agenda', result.body.newAgenda.id);
+    notifyPropertyChange(newAgenda, 'agendaitems');
+    return newAgenda;
   },
 
   async deleteAgenda(agendaToDelete) {
@@ -110,11 +87,11 @@ export default Service.extend(ModifiedMixin, isAuthenticatedMixin, {
       method: 'GET',
       url: `/agenda-sort/agenda-with-changes?agendaToCompare=${agendaToCompareID}&selectedAgenda=${currentAgendaID}`,
     })
-      .then((result) => {
+      .then(bind(this, (result) => {
         this.set('addedDocuments', result.addedDocuments);
         this.set('addedAgendaitems', result.addedAgendaitems);
         return result;
-      })
+      }))
       .catch(() => {
 
       });

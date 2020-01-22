@@ -1,4 +1,5 @@
 import Service, { inject } from '@ember/service';
+import { warn } from '@ember/debug';
 import { task, timeout } from 'ember-concurrency';
 import $ from 'jquery';
 import { later } from '@ember/runloop';
@@ -13,8 +14,12 @@ export default Service.extend(FileSaverMixin, {
   sessionService: inject(),
   intl: inject(),
   shouldUndoChanges: false,
-  objectsToDelete: [],
   currentAgenda: alias('sessionService.currentAgenda'),
+
+  init() {
+    this._super(...arguments);
+    this.set('objectsToDelete', []);
+  },
 
   convertDocumentVersion(documentVersion) {
     try {
@@ -32,7 +37,7 @@ export default Service.extend(FileSaverMixin, {
           return err;
         });
     } catch (e) {
-      console.error(e, 'something went wrong with the conversion');
+      warn(e, 'something went wrong with the conversion', { id: 'document-conversion' });
     }
   },
 
