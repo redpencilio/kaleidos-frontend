@@ -520,5 +520,7 @@
   "error-delete-agenda": "Er ging iets mis tijdens het verwijderen van de agenda. Contacteer de administrator of probeer het opnieuw.",
   "bundling-started":  "De zip van de documenten word aangemaakt. Dit kan enkele minuten duren.",
   "bundling-done": "De zip is klaar!",
-  "bundling-failed": "Er is iets foutgelopen tijdens het aanmaken van de zip"
+  "bundling-failed": "Er is iets foutgelopen tijdens het aanmaken van de zip",
+  "no-themes-selected": "Geen themas geselecteerd",
+  "no-themes-selected-message": "Er zijn nog geen themas geselecteerd. Bent u zeker dat u het kort bestek wilt opslaan?"
 }
