@@ -52,7 +52,7 @@ export default Component.extend(DocumentsSelectorMixin, RdfaEditorMixin, {
     const itemDocumentsToEdit = await item.get('documentVersions');
     const agendaitem = await this.store.findRecord('agendaitem', this.get('agendaitem.id'));
     const subcase = await agendaitem.get('subcase');
-      constthemes = await this.themes;
+    const themes = await this.themes;
     if (documentVersionsSelected) {
       await Promise.all(
         documentVersionsSelected.map(async (documentVersion) => {
