@@ -11,12 +11,12 @@
         </div>
       </div>
     </header>
-    <div class="col--9-12--s col--5-12--m col--6-12">
-      <div class="grid grid--align-right">
-        <div class="col--1-1 col--10-12--m col--6-12--l">
+    <div class="vl-col--12-12">
+      <div class="vl-grid vl-grid--align-center">
+        <div class="vl-col--4-12 vl-col--5-12--m vl-col--8-12--s">
           <h2 class="h4 u-spacer">Kies een gebruiker om mee in te loggen.</h2>
           <input class="input-field input-field--block u-spacer--tiny js-js-input-pattern-bound" placeholder="Gebruikersnaam..." value={{role}} autofocus oninput={{perform updateSearch value='target.value'}}>
-          {{#mock-login as |login|}}
+          {{#mock-login class="vl-col--12-12" as |login|}}
             {{#if queryStore.isRunning}}
               <div class="loader-wrapper">
                 <div class="loader">
@@ -27,16 +27,13 @@
               {{#if login.errorMessage}}
                 {{wu-alert title=login.errorMessage isWarning=true}}
               {{/if}}
-              {{#login.each-account accounts=model as |account|}}
-                {{#wu-info-tile class="u-spacer--tiny" as |i|}}
+              {{#login.each-account class="vl-col--12-12 vl-grid--align-space-between" accounts=model as |account|}}
+                {{#wu-info-tile class="u-spacer--tiny vl-col--12-12" as |i|}}
                   {{#i.content}}
                     {{account.user.firstName}} {{account.user.lastName}}
                   {{/i.content}}
                 {{/wu-info-tile}}
               {{/login.each-account}}
-              {{number-pagination
-                page=page size=size nbOfItems=model.length
-                total=model.meta.count links=model.meta.pagination}}
             {{/if}}
           {{/mock-login}}
         </div>

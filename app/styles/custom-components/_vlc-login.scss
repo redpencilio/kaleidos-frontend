@@ -1,0 +1,34 @@
+.vlc-login {
+  display: flex;
+  flex-direction: row-reverse;
+  height: 100%;
+  overflow-y: scroll;
+}
+
+.vlc-login__content {
+  padding: 8rem;
+
+  @media screen and (max-width: $bp-small) {
+    padding: 4rem;
+  }
+}
+
+.vlc-login__title {
+  font-size: 2rem;
+  line-height: 1.5;
+}
+
+.vlc-login__image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    max-width: 80%;
+    padding: 2.5rem 2.5rem;
+
+    @media screen and (max-width: $bp-small) {
+      padding: 0;
+    }
+  }
+}

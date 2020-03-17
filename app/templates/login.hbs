@@ -1,34 +1,29 @@
 {{!-- template-lint-disable no-bare-strings --}}
-<section class="region">
-  <div class="layout layout--wide">
-    <div class="grid">
-      <div class="col--1-1--s col--8-12--m col--6-12">
-        <h1 class="h1 u-spacer--tiny">
-          Kaleidos
-        </h1>
-        <h2 class="h4 sans-serif">
-          Een webapplicatie die helpt bij het plannen en opvolgen van de agenda van de Vlaamse Regering.
-        </h2>
-        <br />
-        <br />
-        <p class="u-spacer--tiny">
-          Lukt het aanmelden niet? Neem contact op met uw interne beheerder. Indien er zich een probleem voordoet, contacteer
-          <a
-            href="https://overheid.vlaanderen.be/ict/ict-diensten/gebruikersbeheer"
-          >
-            gebruikersbeheer Vlaanderen
-          </a>
-          .
-        </p>
-        <p class="u-spacer--tiny">
-          Het aanmelden gebeurt in een pop-up; zorg dat de instellingen van uw browser correct staan indien deze niet verschijnt.
-        </p>
-      </div>
-      <div
-        class="col--1-1--s col--4-12--m col--6-12 u-align-right--tablet-portrait-up"
-      >
-        {{acmidm-login}}
-      </div>
-    </div>
+<div class="vlc-login vl-grid">
+  <div class="vlc-login__image vl-col--7-12 vl-col--12-12--m vl-u-bg-alt">
+    <img src="/assets/illustration.svg" alt="">
   </div>
-</section>
+
+  <div class="vlc-login__content vl-col--5-12 vl-col--12-12--m vl-u-display-flex vl-u-flex-direction-column vl-u-flex-v-center">
+      <h1 class="h1 vl-u-spacer--medium">
+        Kaleidos
+      </h1>
+      <h2 class="vlc-login__title vl-title vl-title--h2 vl-title--sans">
+        Een webapplicatie die helpt bij het plannen en opvolgen van de agenda van de Vlaamse Regering.
+      </h2>
+      <p>
+        Lukt het aanmelden niet? Neem contact op met uw interne beheerder. Indien er zich een probleem voordoet, contacteer
+        <a
+          href="https://overheid.vlaanderen.be/ict/ict-diensten/gebruikersbeheer"
+        >
+          gebruikersbeheer Vlaanderen.
+        </a>
+      </p>
+      <br/>
+      <p class="vl-u-spacer--medium">
+        Het aanmelden gebeurt in een pop-up; zorg dat de instellingen van uw browser correct staan indien deze niet verschijnt.
+      </p>
+      {{acmidm-login}}
+  </div>
+</div>
+
