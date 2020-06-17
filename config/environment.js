@@ -38,6 +38,12 @@ module.exports = function (environment) {
           ].join(' ')
         }
       }
+    },
+    pageTitle: {
+      replace: false,
+      prepend: false,
+      separator: " - ",
+      front: true
     }
   };
 
