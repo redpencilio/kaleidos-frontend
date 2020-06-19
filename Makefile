@@ -9,8 +9,8 @@ reset-cache:
 	- sleep 5
 
 reset-elastic-and-cache:
-	- docker-compose ${COMPOSE_FILE} kill triplestore elasticsearch musearch file cache resource
-	- docker-compose ${COMPOSE_FILE} rm -f triplestore elasticsearch musearch file cache resource
+	- docker-compose ${COMPOSE_FILE} kill triplestore elasticsearch musearch file cache resource yggdrasil migrations-service
+	- docker-compose ${COMPOSE_FILE} rm -f triplestore elasticsearch musearch file cache resource yggdrasil migrations-service 
 	- rm -rf ${PROJECT_PATH}/testdata
 	- unzip -o ${PROJECT_PATH}/testdata.zip -d ${PROJECT_PATH}
 	- docker-compose ${COMPOSE_FILE} up -d
