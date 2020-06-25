@@ -35,6 +35,7 @@ function login(name, retries = 0) {
       }));
     });
   });
+  cy.route('GET', '/accounts/**').as('getAccountsUrl');
   cy.visit('').wait('@getCurrentSession').then((xhr) => {
     if (xhr.status == 400) {
       if (retries < 5) {
@@ -45,7 +46,7 @@ function login(name, retries = 0) {
         return;
       }
     }
-  });
+  }).wait('@getAccountsUrl');
   cy.log('/login');
 }
 
