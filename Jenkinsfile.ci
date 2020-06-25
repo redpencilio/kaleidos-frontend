@@ -14,49 +14,69 @@ pipeline {
     }
 
     stages {
-        stage('Checkout project') {
+        stage('Prepare folder') {
             steps {
                 sh "export HOST_UID_GID=\$(id -u):\$(id -g)"
+
+                // Switch in env settings file.
                 sh "cp .dist.env .env"
+
+                // Remove project folder if existing.
                 sh "rm -rf kaleidos-project 2> /dev/null"
-                //sh "eval `ssh-agent -s` && ssh-add /var/lib/jenkins/.ssh/id_rsa_github_kaleidos && git clone -b development https://github.com/kanselarij-vlaanderen/kaleidos-project.git"
+            }
+        }
+        stage('Clone project inside frontend') {
+            steps {
+                sh "export HOST_UID_GID=\$(id -u):\$(id -g)"
+
+                // Clone Project
                 sh "git clone -b development https://github.com/kanselarij-vlaanderen/kaleidos-project.git"
             }
         }
-        stage('Prepare for automated tests') {
+        stage('Build frontend container') {
             steps {
                 sh "export HOST_UID_GID=\$(id -u):\$(id -g)"
+
+                // Switch in Dockerfile for frontend.
                 sh "cp ${env.WORKSPACE}/Dockerfile.ci ${env.WORKSPACE}/Dockerfile"
+
+                // Switch in docker-compose override file.
                 sh "cp ${env.WORKSPACE}/ci/docker-compose.override.yml ${env.WORKSPACE}/kaleidos-project/docker-compose.override.yml"
 
+                // Change file permissions.
                 sh "cd ${WORKSPACE}/kaleidos-project && mkdir data && chmod 1777 -R data"
                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName} up -d --build"
+            }
+         }
+         stage('Reset the database') {
+            steps {
+                sh "export HOST_UID_GID=\$(id -u):\$(id -g)"
 
                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName}  exec -T triplestore chmod -R 1777 /data"
                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName}  exec -T musearch chmod 1777 -R /data"
-                //sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName}  exec -T elasticsearch chown -R elasticsearch:root /usr/share/elasticsearch/data"
-                //sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName}  exec -T elasticsearch chmod 1777 -R /usr/share/elasticsearch/data"
                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName}  exec -T file-bundling-service chmod 777 -R /share"
 
+                // Switch in cypress environment settings.
                 sh "cp ${WORKSPACE}/ci/.env.cypress ${WORKSPACE}/.env.cypress"
 
                 // Wait for elasticsearch to have cerated the indices and stuff.
                 sh "sleep 10"
 
-                // Make the folders deletable.
-                // sh "cd ${WORKSPACE}/kaleidos-project && docker-compose  -p ${projectName} exec -T elasticsearch chmod 1777 -R /usr/share/elasticsearch/data"
-
-                // Reset the contents of DB an search
+                // Reset the contents of DB and search
                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose  -p ${projectName} rm -fs elasticsearch  musearch"
                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose  -p ${projectName} kill triplestore file cache resource"
                 sh "cd ${WORKSPACE}/kaleidos-project && rm -rf testdata"
                 sh "cd ${WORKSPACE}/kaleidos-project && unzip -o testdata.zip -d ${WORKSPACE}/kaleidos-project"
                 sh "cd ${WORKSPACE}/kaleidos-project && rm -rf data/*"
                 sh "cd ${WORKSPACE}/kaleidos-project && cp -rf testdata/* data"
+            }
+         }
+         stage('UP all containers') {
+            steps {
+                sh "export HOST_UID_GID=\$(id -u):\$(id -g)"
 
                 // up te system
                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName} up -d"
-                //sh "cd ${WORKSPACE}/kaleidos-project && docker-compose  -p ${projectName} exec -T elasticsearch chmod 1777 -R /usr/share/elasticsearch/data"
 
                 // Wait for indexation.
                 sh "sleep 60"
@@ -64,8 +84,9 @@ pipeline {
         }
         stage('Automated tests: Cypress') {
             steps {
-                 // sh "npx cypress run"
                  sh "export HOST_UID_GID=\$(id -u):\$(id -g)"
+
+                 // Run all tests
                  sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p  ${projectName} exec -T e2e-electron cypress run"
             }
         }
