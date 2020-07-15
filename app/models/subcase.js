@@ -185,6 +185,7 @@ export default ModelWithModifier.extend({
   }),
 
   agendaitemsOnDesignAgendaToEdit: computed('id', 'agendaitems', async function () {
+    // TODO: Aanpassen van query naar het aflopen van relaties bij het uploaden van documenten..
     return await this.store.query('agendaitem', {
       filter: {
         subcase: {id: this.get('id')},

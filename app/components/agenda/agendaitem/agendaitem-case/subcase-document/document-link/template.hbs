@@ -194,7 +194,7 @@
       @isLoading={{isLoading}}
       @cancelAction={{action "cancelUploadVersion"}}
       @saveAction={{action "saveDocument"}}
-      @disableSave={{not uploadedFile}} />
+      @disableSave={{or (not uploadedFile) isUploadingFile}} />
   </WebComponents::VlModal>
 {{/if}}
 {{#if isVerifyingDelete}}

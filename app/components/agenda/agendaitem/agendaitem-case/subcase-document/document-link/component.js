@@ -164,6 +164,7 @@ export default Component.extend(MyDocumentVersions, {
   actions: {
 
     async uploadedFile(uploadedFile) {
+      this.set('isUploadingFile', true);
       const creationDate = moment().utc().toDate();
       if (this.documentContainer) {
         await this.documentContainer.reload();
@@ -189,6 +190,7 @@ export default Component.extend(MyDocumentVersions, {
         newDocument.set('documentContainer', newContainer);
         this.get('documentsInCreation').pushObject(newDocument);
       }
+      this.set('isUploadingFile', false);
     },
 
     showVersions() {
