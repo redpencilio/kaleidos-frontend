@@ -79,9 +79,11 @@ export default Component.extend({
     descriptionUpdated(val) {
       this.set('initValue', this.richtext + val);
     },
-    async handleRdfaEditorInit(editorInterface) {
-      this.set('editor', editorInterface);
-    },
 
+    async handleRdfaEditorInit(editorInterface) {
+      this.editor = editorInterface;
+      const item = await this.item;
+      this.editor.setHtmlContent(`<div>${item.title}</div>`);
+    },
   }
 });
