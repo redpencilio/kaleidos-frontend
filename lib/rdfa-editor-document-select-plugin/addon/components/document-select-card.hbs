@@ -1,4 +1,11 @@
 {{!-- addon/components/rdfa-editor-wikipedia-slug-card.js --}}
 <div>
-<h1>Yaas I'm a card</h1>
+    <h1>Please select documents to insert</h1>
+    <ul>
+        {{#each (await this.agendaitem.documents) as |document|}}
+            <li>
+                <button {{on "click" (fn this.itemClicked document)}} isSelected={{document.isSelected}}>{{await document.lastDocument.name}}</button>
+            </li>
+        {{/each}}
+    </ul>
 </div>
