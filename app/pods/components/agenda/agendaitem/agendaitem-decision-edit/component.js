@@ -80,10 +80,8 @@ export default Component.extend({
       this.set('initValue', this.richtext + val);
     },
 
-    async handleRdfaEditorInit(editorInterface) {
+    handleRdfaEditorInit(editorInterface) {
       this.editor = editorInterface;
-      const item = await this.item;
-      this.editor.setHtmlContent(`<div>${item.title}</div>`);
     },
   }
 });

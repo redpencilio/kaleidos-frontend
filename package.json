@@ -16,7 +16,6 @@
     "last 1 Safari versions"
   ],
   "scripts": {
-    "prestart": "ember-template-lint .",
     "build": "ember build --environment=production",
     "design": "ember serve --proxy=https://kaleidos-dev.vlaanderen.be",
     "design-all": "npm-run-all lint:hbs design",
@@ -116,7 +115,8 @@
   "ember-addon": {
     "paths": [
       "lib/rdfa-editor-text-expand-plugin",
-      "lib/rdfa-editor-document-select-plugin"
+      "lib/rdfa-editor-document-select-plugin",
+      "lib/rdfa-editor-decision-layout-manager"
     ]
   }
 }

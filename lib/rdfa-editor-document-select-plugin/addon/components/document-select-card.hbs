@@ -1,11 +1,19 @@
 {{!-- addon/components/rdfa-editor-wikipedia-slug-card.js --}}
 <div>
-    <h1>Please select documents to insert</h1>
-    <ul>
-        {{#each (await this.agendaitem.documents) as |document|}}
-            <li>
-                <button {{on "click" (fn this.itemClicked document)}} isSelected={{document.isSelected}}>{{await document.lastDocument.name}}</button>
-            </li>
-        {{/each}}
-    </ul>
+    {{#if this.isLoading}}
+        <h1>Loading...</h1>
+    {{else}}
+        {{#if this.documents}}
+            <h1>Please select a document to insert:</h1>
+            <ul>
+                {{#each this.documents as |document|}}
+                    <li>
+                        <button {{on "click" (fn this.decisionDocumentClicked document)}} isSelected={{document.isSelected}}>{{document.name}}</button>
+                    </li>
+                {{/each}}
+            </ul>
+        {{else}}
+            <h1>No documents are found for this decision, please upload documents via the "Documents" tab</h1>
+        {{/if}}
+    {{/if}}
 </div>
