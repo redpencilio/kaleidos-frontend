@@ -10,24 +10,8 @@
     </div>
     <div class="vlc-toolbar__right">
       <div class="vlc-toolbar__item">
-        <a href="javascript://"
-          class="vlc-agenda-items-section-header__link"
-          {{on "click" @toggleShowModifiedOnly}}
-        >
-          {{#if @showModifiedOnly}}
-            {{t "show-all"}}
-          {{else}}
-            {{t "show-changes"}}
-          {{/if}}
-        </a>
       </div>
       <div class="vlc-toolbar__item">
-        {{#if
-          (and
-            this.currentSessionService.isEditor
-            this.isDesignAgenda
-          )
-        }}
           <div class="auk-u-ml-2">
             <a href=""
                data-test-agenda-edit-formally-ok-button
@@ -36,45 +20,46 @@
               {{t "edit"}}
             </a>
           </div>
-        {{/if}}
       </div>
     </div>
   </div>
 
-  {{#if (is-empty @notas)}}
-    <div class="auk-u-mt-2">
-      {{web-components/vl-alert message=(t "no-agendaitems-yet")}}
-    </div>
-  {{/if}}
   <div class={{this.spacerClass}}>
     <ul>
       {{!-- Goedkeuringen vorige vergaderingen --}}
       {{#each this.approvalNotas as |agendaitem|}}
         <li class="vlc-agenda-items__sub-item">
-          <Agenda::AgendaOverview::AgendaOverviewItem
-            @agendaitem={{agendaitem}}
-            @setFormallyOkAction={{fn this.setFormallyOkAction agendaitem}}
-            @showFormallyOkStatus={{this.isDesignAgenda}}
+          I
+          {{!-- <Agenda::AgendaOverview::AgendaOverviewItem
+          @agendaitem={{agendaitem}}
+          @setFormallyOkAction={{fn this.setFormallyOkAction agendaitem}}
+          @showFormallyOkStatus={{this.isDesignAgenda}}
           />
+          --}}
         </li>
       {{/each}}
     </ul>
 
-    <ul
-      {{sortable-group onChange=@onReorderAgendaitems}}
-      {{did-update (perform this.groupNotasOnGroupName this.regularNotas) this.regularNotas}}>
+    <ul>
       {{!-- other notas --}}
-      {{#each this.groupedNotas as |agendaitemGroup|}}
-        <Agenda::AgendaOverview::AgendaitemGroupHeader @mandatees={{agendaitemGroup.mandatees}}/>
+      {{#each this.groupedNotas as |agendaitemGroup groupIndex|}}
+        {{!-- <Agenda::AgendaOverview::AgendaitemGroupHeader @mandatees={{agendaitemGroup.mandatees}}/> --}}
+        <h1>
+          {{groupIndex}}
+          {{#each agendaitemGroup.mandatees as |mandatee|}}
+            {{mandatee.title}}
+          {{/each}}
+        </h1>
+
+        <ul>
         {{#each agendaitemGroup.agendaitems as |agendaitem|}}
+          <li>
+            {{agendaitem.title}} (heeft {{agendaitem.pieces.length}} documenten)
+          </li>
+
+          {{!--
           <li
             class="vlc-agenda-items__sub-item"
-            {{sortable-item
-              model=agendaitem
-              distance="30"
-              handle=this.dragHandleClass
-              isDraggingDisabled=(not this.isDraggingEnabled)
-            }}
           >
             <Agenda::AgendaOverview::AgendaOverviewItem
               @agendaitem={{agendaitem}}
@@ -82,7 +67,9 @@
               @showFormallyOkStatus={{this.isDesignAgenda}}
             />
           </li>
+          --}}
         {{/each}}
+        </ul>
       {{/each}}
     </ul>
   </div>
@@ -92,16 +79,20 @@
     </h3>
   </div>
   <div class="auk-u-mb-4">
+    {{#each @announcements as |a|}}
+      A
+    {{/each}}
+    {{!--
     {{#if (gt @announcements.length 0)}}
       <ul {{sortable-group onChange=@onReorderAgendaitems}} >
         {{#each @announcements as |announcement|}}
           <li
             class="vlc-agenda-items__sub-item"
             {{sortable-item
-              model=announcement
-              distance="30"
-              handle=this.dragHandleClass
-              isDraggingDisabled=(not this.isDraggingEnabled)
+                model=announcement
+                distance="30"
+                handle=this.dragHandleClass
+                isDraggingDisabled=(not this.isDraggingEnabled)
             }}
           >
             <Agenda::AgendaOverview::AgendaOverviewItem
@@ -115,6 +106,7 @@
     {{else}}
       <WebComponents::VlAlert @message={{t "no-announcements-yet"}} />
     {{/if}}
+    --}}
   </div>
   {{#if this.showLoader}}
     <WebComponents::AuLoadingOverlay/>
