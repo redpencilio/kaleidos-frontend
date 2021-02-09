@@ -29,13 +29,11 @@
       {{!-- Goedkeuringen vorige vergaderingen --}}
       {{#each this.approvalNotas as |agendaitem|}}
         <li class="vlc-agenda-items__sub-item">
-          I
-          {{!-- <Agenda::AgendaOverview::AgendaOverviewItem
-          @agendaitem={{agendaitem}}
-          @setFormallyOkAction={{fn this.setFormallyOkAction agendaitem}}
-          @showFormallyOkStatus={{this.isDesignAgenda}}
+          <Agenda::AgendaOverview::AgendaOverviewItem
+            @agendaitem={{agendaitem}}
+            @setFormalStatus={{fn this.setAgendaItemFormalStatus agendaitem}}
+            @showFormallyOkStatus={{this.isDesignAgenda}}
           />
-          --}}
         </li>
       {{/each}}
     </ul>

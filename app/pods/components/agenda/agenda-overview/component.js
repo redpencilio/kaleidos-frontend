@@ -60,9 +60,9 @@ export default class AgendaOverview extends Component {
   }
 
   @action
-  async setFormallyOkAction(agendaitem, formallyOkUri) {
+  async setAgendaItemFormalStatus(agendaitem, formalStatusUri) {
     this.showLoader = true;
-    agendaitem.formallyOk = formallyOkUri;
+    agendaitem.formallyOk = formalStatusUri;
     await agendaitem
       .save()
       .catch(() => {

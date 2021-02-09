@@ -36,7 +36,6 @@ function createSubcaseLoader(target) {
       shouldLoad = false;
     }
   };
-
 }
 
 export default class AgendaOverviewItem extends Component {
@@ -91,9 +90,9 @@ export default class AgendaOverviewItem extends Component {
     this.router.transitionTo('publications.publication.case', newPublication.id);
   }
 
-  @task
-  *setFormallyOkStatus(status) {
-    yield this.args.setFormallyOkAction(status.uri);
+  @action
+  setFormalStatus(status) {
+    this.args.setFormalStatus(status.uri);
   }
 
   @task
