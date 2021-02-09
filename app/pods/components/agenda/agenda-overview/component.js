@@ -12,16 +12,14 @@ class AgendaitemGroup {
   constructor(mandatees, firstAgendaItem) {
     this.mandatees = mandatees;
     this.agendaitems = A([firstAgendaItem]);
-  }
-
-  get sortedMandatees() {
-    return this.mandatees.sortBy('priority');
+    this.sortedMandatees = A(this.mandatees.sortBy('priority').toArray());
+    this.sortedMandateeIdsString = this.sortedMandatees.mapBy('id').join();
   }
 
   async itemBelongsToThisGroup(agendaitem) {
-    const mandatees = await agendaitem.get('mandatees');
+    const mandatees = A((await agendaitem.get('mandatees')).toArray());
     mandatees.sortBy('priority');
-    return mandatees.mapBy('id').join() === this.sortedMandatees.mapBy('id').join(); // Compare by value
+    return mandatees.mapBy('id').join() === this.sortedMandateeIdsString; // Compare by value
   }
 }
 
@@ -86,12 +84,14 @@ export default class AgendaOverview extends Component {
     const agendaitemGroups = [];
     let currentAgendaitemGroup;
     for (const agendaitem of agendaitemsArray) {
+      // yield new Promise((acc) => requestAnimationFrame(acc));
+      yield new Promise((acc) => setTimeout(acc,0));
       if (currentAgendaitemGroup && (yield currentAgendaitemGroup.itemBelongsToThisGroup(agendaitem))) {
         currentAgendaitemGroup.agendaitems.pushObject(agendaitem);
       } else {
-        const mandatees = yield agendaitem.get('mandatees');
-        mandatees.sortBy('priority');
-        currentAgendaitemGroup = new AgendaitemGroup(mandatees, agendaitem);
+        // const mandatees = A(yield agendaitem.get('mandatees').toArray());
+        // mandatees.sortBy('priority');
+        currentAgendaitemGroup = new AgendaitemGroup(yield agendaitem.get('mandatees'), agendaitem);
         agendaitemGroups.push(currentAgendaitemGroup);
       }
     }

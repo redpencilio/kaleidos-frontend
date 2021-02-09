@@ -44,11 +44,15 @@ export default class AgendaItemsAgendaRoute extends Route {
       sort: 'show-as-remark,priority',
     });
 
+    await new Promise((acc) => setTimeout( acc, 0 ));
+
     const notas = agendaitems.filter((agendaitem) => !agendaitem.showAsRemark);
+    await new Promise((acc) => setTimeout( acc, 0 ));
     const announcements = agendaitems.filter((agendaitem) => agendaitem.showAsRemark);
 
     this.set('sessionService.selectedAgendaitem', null);
 
+    await new Promise((acc) => setTimeout( acc, 0 ));
     return hash({
       notas,
       announcements,
