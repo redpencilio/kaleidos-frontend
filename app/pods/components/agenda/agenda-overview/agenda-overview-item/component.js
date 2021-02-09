@@ -9,6 +9,36 @@ import {
 } from 'ember-concurrency-decorators';
 import { sortPieces } from 'fe-redpencil/utils/documents';
 
+function createSubcaseLoader(target) {
+  let shouldLoad = false;
+
+  let maybeLoadSubcases = function() {
+    setTimeout( () =>
+      requestAnimationFrame( () =>
+        setTimeout( () => {
+          try {
+            if( shouldLoad ) {
+              target.doLoadSubcases();
+            }
+          } catch (e) {
+            console.log("Component died before loading subcases");
+          }
+        }) ), 400 );
+  };
+
+  return {
+    load() {
+      shouldLoad = true;
+      maybeLoadSubcases();
+    },
+
+    cancel() {
+      shouldLoad = false;
+    }
+  };
+
+}
+
 export default class AgendaOverviewItem extends Component {
   /**
    *
@@ -30,6 +60,7 @@ export default class AgendaOverviewItem extends Component {
 
   constructor() {
     super(...arguments);
+    this.subcaseLoader = createSubcaseLoader(this);
     this.agendaitemDocuments = [];
     this.loadDocuments.perform();
   }
@@ -73,11 +104,29 @@ export default class AgendaOverviewItem extends Component {
     this.agendaitemDocuments = sortedPieces;
   }
 
+  async doLoadSubcases() {
+    try {
+      console.log("Loading subcases");
+      const agendaActivity = await this.args.agendaitem.agendaActivity;
+      if (agendaActivity) { // the approval agenda-item doesn't have agenda activity
+        this.subcase = await agendaActivity.subcase;
+      }
+    } catch (e) {
+      console.log("Component died during loading of subcases");
+    }
+  }
+
+
   @task
   *lazyLoad(task) {
     if (task.performCount === 0) {
       yield timeout(400);
-      yield task.perform();
+      yield new Promise( (acc) =>
+        requestAnimationFrame( async () => {
+          await timeout(0);
+          await task.perform();
+          acc();
+        } ) );
     }
   }
 
