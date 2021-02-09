@@ -57,6 +57,8 @@ export default class AgendaOverviewItem extends Component {
 
   @tracked isShowingAllDocuments = false;
 
+  documentListSize = 20;
+
   constructor() {
     super(...arguments);
     this.subcaseLoader = createSubcaseLoader(this);
@@ -66,10 +68,6 @@ export default class AgendaOverviewItem extends Component {
 
   get documentsAreReleased() {
     return this.sessionService.currentSession.releasedDocuments > new Date();
-  }
-
-  get documentListSize() {
-    return 20;
   }
 
   get limitedAgendaitemDocuments() {
@@ -112,38 +110,6 @@ export default class AgendaOverviewItem extends Component {
       }
     } catch (e) {
       console.log("Component died during loading of subcases");
-    }
-  }
-
-
-  @task
-  *lazyLoad(task) {
-    if (task.performCount === 0) {
-      yield timeout(400);
-      yield new Promise( (acc) =>
-        requestAnimationFrame( async () => {
-          await timeout(0);
-          await task.perform();
-          acc();
-        } ) );
-    }
-  }
-
-  @action
-  cancelLazyLoad(task) {
-    task.cancelAll();
-  }
-
-  @dropTask
-  *lazyLoadSubcase() {
-    yield this.lazyLoad.perform(this.loadSubcase);
-  }
-
-  @dropTask
-  *loadSubcase() {
-    const agendaActivity = yield this.args.agendaitem.agendaActivity;
-    if (agendaActivity) { // the approval agenda-item doesn't have agenda activity
-      this.subcase = yield agendaActivity.subcase;
     }
   }
 
