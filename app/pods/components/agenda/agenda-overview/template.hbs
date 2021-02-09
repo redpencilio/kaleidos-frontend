@@ -42,14 +42,8 @@
 
     <ul>
       {{!-- other notas --}}
-      {{#each this.groupedNotas as |agendaitemGroup groupIndex|}}
-        {{!-- <Agenda::AgendaOverview::AgendaitemGroupHeader @mandatees={{agendaitemGroup.mandatees}}/> --}}
-        <h1>
-          {{groupIndex}}
-          {{#each agendaitemGroup.mandatees as |mandatee|}}
-            {{mandatee.title}}
-          {{/each}}
-        </h1>
+      {{#each this.groupedNotas as |agendaitemGroup|}}
+        <Agenda::AgendaOverview::AgendaitemGroupHeader @mandatees={{agendaitemGroup.mandatees}}/>
 
         <ul>
         {{#each agendaitemGroup.agendaitems as |agendaitem|}}
